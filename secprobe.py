@@ -51,7 +51,7 @@ BANNER = """
  .kWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW0'     ████  ████ ██  ██ ██  ██ ████  ████
  lXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWO.    ████████  ██  ██ ██  ██  ████████
 .OX0OO0KXWWWWWWWWWWWWWWWWWWWWWWWWWWx.   
-'Ol.   .:d0NWWWWWWWWWWWWWWWWWWWWWWWW0'  [cyan]Kali Linux Compatible Security Toolkit[/cyan]
+'Ol.   .:d0NWWWWWWWWWWWWWWWWWWWWWWWW0'  [cyan]Compatible Security Toolkit[/cyan]
  .         .:ONWWWWWWWWWWWWWWWWWWWWWNd. [cyan]v2.0.0 | Made by iamfaz0[/cyan]
              .kWWWWWWWWWWWWWWWWWWWWWWK;
               cKWWWWWWWWWWWWWWWWWWWWWO.

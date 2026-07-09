@@ -7,9 +7,6 @@ A powerful, fast, and comprehensive penetration testing tool designed for **Linu
 [![Version](https://img.shields.io/badge/version-2.0.0-orange.svg)]()
 
 ---
-
-## 🎬 Demo Screenshots
-
 ### JWT Security Audit
 ```
 ╔════════════════════════════════════════════════════════════════════╗
