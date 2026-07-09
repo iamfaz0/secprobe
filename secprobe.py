@@ -274,7 +274,7 @@ async def main():
         sys.exit(1)
     
     # Check for quiet flag
-    quiet_mode = args.quiet
+    quiet_mode = getattr(args, 'quiet', False)
     
     # Initialize app
     app = SecProbe()
