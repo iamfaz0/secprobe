@@ -1,0 +1,17 @@
+# SecProbe Requirements for Termux
+# Python 3.8+
+
+# HTTP requests
+httpx>=0.24.0
+
+# JWT handling (PyJWT works without cryptography)
+PyJWT>=2.8.0
+
+# CLI and output formatting
+rich>=13.0.0
+click>=8.1.0
+
+# Async support (built into Python 3.8+)
+
+# Optional but recommended
+aiofiles>=23.0.0

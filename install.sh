@@ -20,6 +20,8 @@ NC='\033[0m' # No Color
 if [[ "$PREFIX" == *"com.termux"* ]]; then
     IS_TERMUX=true
     echo -e "${YELLOW}[*] Termux detected${NC}"
+    echo -e "${YELLOW}[*] Note: Installing cryptography on Termux requires rust. If install fails, run:${NC}"
+    echo -e "      pkg update && pkg install rust python-cryptography${NC}"
 else
     IS_TERMUX=false
     echo -e "${YELLOW}[*] Linux system detected${NC}"
@@ -52,13 +54,28 @@ fi
 
 # Install dependencies
 echo "[*] Installing Python dependencies..."
+
+# Use Termux-specific requirements if on Termux
+if [ "$IS_TERMUX" = true ]; then
+    REQ_FILE="requirements-termux.txt"
+    echo "[*] Using Termux-optimized requirements"
+else
+    REQ_FILE="requirements.txt"
+fi
+
 # Try user install first, then system-wide with --break-system-packages for externally managed environments
-pip3 install --user -r requirements.txt 2>/dev/null || \
-pip3 install --break-system-packages --user -r requirements.txt 2>/dev/null || \
-pip3 install -r requirements.txt 2>/dev/null || \
-pip3 install --break-system-packages -r requirements.txt 2>/dev/null || {
-    echo -e "${RED}[!] Failed to install dependencies. Try running with --break-system-packages flag${NC}"
-    echo "   Or use: python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+pip3 install --user -r "$REQ_FILE" 2>/dev/null || \
+pip3 install --break-system-packages --user -r "$REQ_FILE" 2>/dev/null || \
+pip3 install -r "$REQ_FILE" 2>/dev/null || \
+pip3 install --break-system-packages -r "$REQ_FILE" 2>/dev/null || {
+    echo -e "${RED}[!] Failed to install dependencies.${NC}"
+    if [ "$IS_TERMUX" = true ]; then
+        echo "   Try: pkg install rust python-cryptography"
+        echo "   Then re-run this installer"
+    else
+        echo "   Try running with --break-system-packages flag"
+        echo "   Or use: python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+    fi
 }
 
 # Make secprobe executable
