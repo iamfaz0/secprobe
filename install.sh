@@ -52,7 +52,14 @@ fi
 
 # Install dependencies
 echo "[*] Installing Python dependencies..."
-pip3 install --user -r requirements.txt || pip3 install -r requirements.txt
+# Try user install first, then system-wide with --break-system-packages for externally managed environments
+pip3 install --user -r requirements.txt 2>/dev/null || \
+pip3 install --break-system-packages --user -r requirements.txt 2>/dev/null || \
+pip3 install -r requirements.txt 2>/dev/null || \
+pip3 install --break-system-packages -r requirements.txt 2>/dev/null || {
+    echo -e "${RED}[!] Failed to install dependencies. Try running with --break-system-packages flag${NC}"
+    echo "   Or use: python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+}
 
 # Make secprobe executable
 echo "[*] Setting up executable..."
