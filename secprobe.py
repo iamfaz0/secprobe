@@ -25,6 +25,10 @@ from modules.cloud_scanner import CloudScanner
 from modules.web_fuzzer import WebFuzzer
 from modules.report_generator import ReportGenerator
 from modules.update_checker import show_update_if_available
+from modules.cve_checker import cve_checker
+from modules.report_templates import generate_report
+from modules.vuln_database import save_scan, search_vulns, list_scans, vuln_db
+from modules.proxy_handler import set_proxy
 
 console = Console()
 
@@ -187,6 +191,9 @@ Examples:
     
     parser.add_argument("-v", "--version", action="version", version="%(prog)s 2.0.0")
     parser.add_argument("--no-color", action="store_true", help="Disable colored output")
+    parser.add_argument("--proxy", help="Proxy URL (http://host:port, socks5://host:port, or 'tor')")
+    parser.add_argument("--save-db", action="store_true", help="Save results to local database")
+    parser.add_argument("--cve-check", action="store_true", help="Check findings against CVE database")
     
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     
@@ -237,6 +244,14 @@ Examples:
     update_parser = subparsers.add_parser("update", help="Check for updates")
     update_parser.add_argument("--force", action="store_true", help="Force update check")
     
+    # Database Command
+    db_parser = subparsers.add_parser("db", help="Vulnerability Database")
+    db_parser.add_argument("--list", action="store_true", help="List recent scans")
+    db_parser.add_argument("--search", help="Search vulnerabilities")
+    db_parser.add_argument("--severity", help="Filter by severity (CRITICAL,HIGH,MEDIUM,LOW)")
+    db_parser.add_argument("--target", help="Filter by target")
+    db_parser.add_argument("--stats", action="store_true", help="Show database statistics")
+    
     # Full Command
     full_parser = subparsers.add_parser("full", help="Full Security Assessment")
     full_parser.add_argument("-t", "--target", required=True, help="Target URL/Domain")
@@ -268,6 +283,12 @@ async def main():
         app.show_banner()
     
     results = {}
+    
+    # Set up proxy if specified
+    if hasattr(args, 'proxy') and args.proxy:
+        set_proxy(args.proxy)
+        if not quiet_mode:
+            console.print(f"[bold yellow]Using proxy: {args.proxy}[/bold yellow]")
     
     try:
         if args.command == "jwt":
@@ -322,6 +343,46 @@ async def main():
                 console.print("[bold green]✓ SecProbe is up to date![/bold green]")
             return
         
+        elif args.command == "db":
+            if args.stats:
+                stats = vuln_db.get_stats()
+                console.print("[bold cyan]=== Database Statistics ===[/bold cyan]\n")
+                console.print(f"Total Scans: {stats['total_scans']}")
+                console.print(f"Total Vulnerabilities: {stats['total_vulnerabilities']}")
+                console.print("\nSeverity Breakdown:")
+                for sev, count in stats.get('severity_breakdown', {}).items():
+                    console.print(f"  {sev}: {count}")
+            elif args.list:
+                scans = list_scans(limit=20)
+                table = Table(title="Recent Scans")
+                table.add_column("ID", style="cyan")
+                table.add_column("Target", style="green")
+                table.add_column("Type", style="yellow")
+                table.add_column("Vulns", style="red")
+                for scan in scans:
+                    table.add_row(
+                        str(scan['id']),
+                        scan['target'],
+                        scan['scan_type'],
+                        f"{scan['total_vulns']} (C:{scan['critical']} H:{scan['high']} M:{scan['medium']} L:{scan['low']})"
+                    )
+                console.print(table)
+            elif args.search:
+                vulns = search_vulns(
+                    query=args.search,
+                    severity=args.severity,
+                    target=args.target
+                )
+                console.print(f"[bold cyan]Found {len(vulns)} vulnerabilities:[/bold cyan]\n")
+                for vuln in vulns:
+                    console.print(f"[{vuln['severity']}] {vuln['title']}")
+                    console.print(f"  Target: {vuln['target']} | Module: {vuln['module']}")
+                    console.print(f"  {vuln['description'][:100]}...")
+                    console.print()
+            else:
+                parser.print_help()
+            return
+        
         elif args.command == "full":
             if not quiet_mode:
                 console.print("[bold yellow]Starting Full Security Assessment...[/bold yellow]\n")
@@ -354,10 +415,63 @@ async def main():
         
         # Save report if requested
         if args.output:
-            report_gen = ReportGenerator()
-            report_gen.save_json(results, args.output)
+            # Check output format
+            if args.output.endswith('.html'):
+                report_data = {
+                    'target': args.target,
+                    'timestamp': datetime.now().isoformat(),
+                    'scan_type': args.command,
+                    'stats': {},
+                    'vulnerabilities': [],
+                    'findings': {}
+                }
+                for module, data in results.items():
+                    report_data['vulnerabilities'].extend(data.get('vulnerabilities', []))
+                    report_data['findings'].update(data.get('findings', {}))
+                generate_report(report_data, args.output, 'html')
+            elif args.output.endswith('.md'):
+                report_data = {
+                    'target': args.target,
+                    'timestamp': datetime.now().isoformat(),
+                    'scan_type': args.command,
+                    'stats': {},
+                    'vulnerabilities': [],
+                    'findings': {}
+                }
+                for module, data in results.items():
+                    report_data['vulnerabilities'].extend(data.get('vulnerabilities', []))
+                generate_report(report_data, args.output, 'md')
+            else:
+                report_gen = ReportGenerator()
+                report_gen.save_json(results, args.output)
             if not quiet_mode:
                 console.print(f"\n[bold green]Report saved to: {args.output}[/bold green]")
+        
+        # CVE Check
+        if hasattr(args, 'cve_check') and args.cve_check and results:
+            console.print("\n[bold yellow]Checking CVE database...[/bold yellow]")
+            for module, data in results.items():
+                vulns = data.get('vulnerabilities', [])
+                if vulns:
+                    enriched = cve_checker.enrich_findings(vulns)
+                    for vuln in enriched:
+                        if vuln.get('cves'):
+                            console.print(f"\n[cyan]{vuln.get('title')}[/cyan]")
+                            for cve in vuln['cves'][:3]:  # Show top 3
+                                console.print(f"  → {cve['id']} (CVSS: {cve['score']}) - {cve['severity']}")
+        
+        # Save to database
+        if hasattr(args, 'save_db') and args.save_db and results:
+            scan_data = {
+                'vulnerabilities': [],
+                'findings': {}
+            }
+            for module, data in results.items():
+                scan_data['vulnerabilities'].extend(data.get('vulnerabilities', []))
+                scan_data['findings'].update(data.get('findings', {}))
+            scan_id = save_scan(args.target, args.command, scan_data)
+            if not quiet_mode:
+                console.print(f"\n[bold green]Scan saved to database (ID: {scan_id})[/bold green]")
     
     except KeyboardInterrupt:
         console.print("\n[bold red]Interrupted by user[/bold red]")
