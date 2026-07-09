@@ -24,6 +24,7 @@ from modules.recon import ReconModule
 from modules.cloud_scanner import CloudScanner
 from modules.web_fuzzer import WebFuzzer
 from modules.report_generator import ReportGenerator
+from modules.update_checker import show_update_if_available
 
 console = Console()
 
@@ -70,6 +71,8 @@ class SecProbe:
     
     def show_banner(self):
         console.print(BANNER)
+        # Check for updates (non-blocking, cached)
+        show_update_if_available()
     
     async def run_jwt_audit(self, target: str, wordlist: Optional[str] = None, 
                            exploit: bool = False) -> Dict:
@@ -230,6 +233,10 @@ Examples:
     fuzz_parser.add_argument("-o", "--output", help="Output file for report (JSON)")
     fuzz_parser.add_argument("-q", "--quiet", action="store_true", help="Quiet mode")
     
+    # Update Command
+    update_parser = subparsers.add_parser("update", help="Check for updates")
+    update_parser.add_argument("--force", action="store_true", help="Force update check")
+    
     # Full Command
     full_parser = subparsers.add_parser("full", help="Full Security Assessment")
     full_parser.add_argument("-t", "--target", required=True, help="Target URL/Domain")
@@ -304,6 +311,16 @@ async def main():
             )
             if not quiet_mode:
                 app.display_results("Web Fuzzer", results["fuzz"])
+        
+        elif args.command == "update":
+            from modules.update_checker import check_updates
+            console.print("[bold yellow]Checking for updates...[/bold yellow]")
+            update_available, message = check_updates(force=True)
+            if update_available and message:
+                console.print(message)
+            else:
+                console.print("[bold green]✓ SecProbe is up to date![/bold green]")
+            return
         
         elif args.command == "full":
             if not quiet_mode:
