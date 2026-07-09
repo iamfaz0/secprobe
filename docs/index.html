@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecProbe - Advanced Penetration Testing Toolkit</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔒%3C/text%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+        }
+        
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a5a);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,107,107,0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-card p {
+            color: #a0a0a0;
+        }
+        
+        .install-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 4rem 0;
+            text-align: center;
+        }
+        
+        .install-section h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #4ecdc4;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #666;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 4rem;
+        }
+        
+        footer a {
+            color: #4ecdc4;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🔒</div>
+            <h1>SecProbe</h1>
+            <p class="tagline">Advanced Penetration Testing Toolkit for Linux & Termux</p>
+            <div class="badges">
+                <span class="badge">⚡ Fast</span>
+                <span class="badge">🔧 Powerful</span>
+                <span class="badge">📱 Termux Ready</span>
+                <span class="badge">🐍 Python 3.8+</span>
+            </div>
+            <div class="cta-buttons">
+                <a href="https://github.com/iamfaz0/secprobe" class="btn btn-primary">📥 Download on GitHub</a>
+                <a href="#install" class="btn btn-secondary">📖 Documentation</a>
+            </div>
+        </header>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>JWT Auditor</h3>
+                <p>Test JWT implementations for weak secrets, algorithm confusion, and "none" algorithm attacks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>API Security Tester</h3>
+                <p>CORS misconfiguration detection, IDOR/BOLA testing, GraphQL introspection checks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Reconnaissance</h3>
+                <p>Async port scanning, subdomain enumeration, technology fingerprinting, SSL checks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">☁️</div>
+                <h3>Cloud Scanner</h3>
+                <p>S3 bucket enumeration, Azure Blob testing, GCP Cloud Storage security checks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Web Fuzzer</h3>
+                <p>XSS, SQL injection, command injection, path traversal, SSTI detection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Report Generator</h3>
+                <p>JSON, HTML, and Markdown reports for professional security assessments.</p>
+            </div>
+        </section>
+        
+        <section class="install-section" id="install">
+            <h2>🚀 Quick Install</h2>
+            <div class="code-block">
+                <code># Clone repository<br>
+git clone https://github.com/iamfaz0/secprobe.git<br>
+cd secprobe<br><br>
+# Install dependencies<br>
+pip3 install -r requirements.txt<br><br>
+# Run SecProbe<br>
+python3 secprobe.py --help</code>
+            </div>
+            <p>Or use the one-line installer:</p>
+            <div class="code-block">
+                <code>bash install.sh</code>
+            </div>
+        </section>
+        
+        <section class="install-section">
+            <h2>💰 Bug Bounty Ready</h2>
+            <p>SecProbe is designed specifically for bug bounty hunting and penetration testing. Tested on HackerOne, Bugcrowd, and more.</p>
+            <div class="code-block">
+                <code># JWT Security Audit<br>
+secprobe jwt --target "eyJhbG..."<br><br>
+# Full Security Assessment<br>
+secprobe full --target example.com -o report.json</code>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Made with ❤️ by <a href="https://github.com/iamfaz0">iamfaz0</a></p>
+            <p>Licensed under MIT License</p>
+        </footer>
+    </div>
+</body>
+</html>
