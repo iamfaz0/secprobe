@@ -97,6 +97,20 @@ A powerful, fast, and comprehensive penetration testing tool designed for **Linu
 
 ---
 
+## 🆕 What's New in v2.0
+
+### ✨ New Features Added:
+
+| Feature | Command | Description |
+|---------|---------|-------------|
+| **CVE Checker** | `--cve-check` | Match findings against NVD CVE database |
+| **Report Templates** | `-o report.html` | Generate beautiful HTML/Markdown/JSON reports |
+| **Vulnerability Database** | `secprobe db --list` | SQLite database with search & stats |
+| **Proxy Support** | `--proxy tor` | Route through HTTP/SOCKS5 proxies or Tor |
+| **Auto-Updater** | `secprobe update` | Check GitHub daily for new versions |
+
+---
+
 ## 📦 Installation
 
 ### Quick Install (Linux/Termux)
@@ -330,6 +344,82 @@ SecProbe is designed specifically for bug bounty hunting:
 - YesWeHack
 - Synack
 - Open Bug Bounty
+
+---
+
+## 🚀 Advanced Features Usage
+
+### 🆕 CVE Database Integration
+Automatically match findings against the National Vulnerability Database:
+
+```bash
+# Check CVEs during full scan
+python3 secprobe.py full --target example.com --cve-check
+
+# Shows matching CVEs with CVSS scores
+[CVE-2023-XXXX] XSS in React (CVSS: 7.5) - HIGH
+[CVE-2022-YYYY] SQL Injection (CVSS: 9.8) - CRITICAL
+```
+
+### 🆕 Report Templates
+Generate professional HTML and Markdown reports:
+
+```bash
+# HTML report with dark theme and charts
+python3 secprobe.py full --target example.com -o report.html
+
+# Markdown report for documentation
+python3 secprobe.py full --target example.com -o report.md
+
+# JSON for automation
+python3 secprobe.py full --target example.com -o report.json
+```
+
+### 🆕 Vulnerability Database
+SQLite-based storage with full-text search:
+
+```bash
+# Save scan to database
+python3 secprobe.py full --target example.com --save-db
+
+# List recent scans
+python3 secprobe.py db --list
+
+# Search vulnerabilities
+python3 secprobe.py db --search "xss"
+python3 secprobe.py db --search "sql" --severity HIGH
+
+# Filter by target
+python3 secprobe.py db --target example.com
+
+# Show database statistics
+python3 secprobe.py db --stats
+```
+
+### 🆕 Proxy Chain Support
+Route scans through proxies or Tor:
+
+```bash
+# HTTP proxy
+python3 secprobe.py recon --target example.com --proxy http://127.0.0.1:8080
+
+# SOCKS5 proxy
+python3 secprobe.py api --target example.com --proxy socks5://127.0.0.1:1080
+
+# Tor (automatically uses 127.0.0.1:9050)
+python3 secprobe.py full --target example.com --proxy tor
+```
+
+### 🆕 Auto-Updater
+Check for updates from GitHub:
+
+```bash
+# Manual update check
+python3 secprobe.py update
+
+# Daily automatic checks (shown in banner)
+# Set env var to disable: SECPROBE_NO_UPDATE_CHECK=1
+```
 
 ---
 
