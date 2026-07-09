@@ -28,15 +28,37 @@ from modules.report_generator import ReportGenerator
 console = Console()
 
 BANNER = """
+[bold blue]
+  ..######..##.....##.####..........###....########...######..########
+  .##....##.##.....##..##..........##.##...##.....##.##....##.##......
+  .##.......##.....##..##.........##...##..##.....##.##.......##......
+  ..######..##.....##..##........##.....##.########..##.......######..
+  .......##.##.....##..##........#########.##...##...##.......##......
+  .##....##.##.....##..##........##.....##.##....##..##....##.##......
+  ..######...#######..####.......##.....##.##.....##..######..########
+[/bold blue]
 [bold red]
-  ██████  ███████ ██████   ██████  ██████   ██████  ███████ ███████╗
-  ██   ██ ██      ██   ██ ██   ██ ██   ██ ██    ██ ██      ██╔════╝
-  ██████  █████   ██████  ██████  ██████  ██    ██ █████   █████╗  
-  ██   ██ ██      ██      ██      ██      ██    ██ ██      ██╔══╝  
-  ██████  ███████ ██      ██      ██       ██████  ███████ ██      
+         .;okKXNNNWNXK0xo:.
+      .:OXWWWWWWWWWWWWWWWWKd'           ████████████████████████████████████
+    .cKWWWWWWWWWWWWWWWWWWWWWW0c         ████████  ██  ██ ██  ██  ████████
+   ;0WWWWWWWWWWWWWWWWWWWWWWWWWXo        ████  ████ ████ █████ ████ ████  ████
+  ;KWWWWWWWWWWWWWWWWWWWWWWWWWWWWk.      ████    ██ ██ ████ ████ ██ ████    ██
+ .kWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW0'     ████  ████ ██  ██ ██  ██ ████  ████
+ lXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWO.    ████████  ██  ██ ██  ██  ████████
+.OX0OO0KXWWWWWWWWWWWWWWWWWWWWWWWWWWx.   
+'Ol.   .:d0NWWWWWWWWWWWWWWWWWWWWWWWW0'  [cyan]Kali Linux Compatible Security Toolkit[/cyan]
+ .         .:ONWWWWWWWWWWWWWWWWWWWWWNd. [cyan]v2.0.0 | Made by iamfaz0[/cyan]
+             .kWWWWWWWWWWWWWWWWWWWWWWK;
+              cKWWWWWWWWWWWWWWWWWWWWWO.
+              .kWWWWWWWWWWWWWWWWWWWWWX:
+               lNWWWWWWWWWWWWWWWWWWWWWd.
+               .kWWWWWWWWWWWWWWWWWWWWK,
+                cXWWWWWWWWWWWWWWWWWWWO.
+                .xNWWWWWWWWWWWWWWWWWX:
+                 'kWWWWWWWWWWWWWWWWWd.
+                  'xXWWWWWWWWWWWWWWk'
+                    'cxOKXNNNXK0xc.
 [/bold red]
-[bold cyan]  Advanced Penetration Testing Toolkit v2.0.0[/bold cyan]
-[dim]  Linux & Termux Compatible | Made by iamfaz0[/dim]
 """
 
 class SecProbe:
